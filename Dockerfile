@@ -1,11 +1,12 @@
-FROM public.ecr.aws/docker/library/maven:latest AS Build
+# Stage 1 - Build
+FROM maven:3.9.6-eclipse-temurin-21-alpine AS build
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
-RUN nvm clean package
+RUN mvn clean package -DskipTests
 
-FROM public.ecr.aws/docker/library/eclipse-temurin:21-alpine AS Run
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+# Stage 2 - Run
+FROM public.ecr.aws/docker/library/eclipse-temurin:21-alpine
+COPY --from=build /app/target/*.jar app.jar
+ENTRYPOINT ["java", "-jar", "/app.jar"]
 EXPOSE 8080
