@@ -15,10 +15,6 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-
-      - name: Build application with Maven
-        run: mvn clean install
-
       - name: Log in to GitHub Container Registry (GHCR)
         run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u "${{ github.repository_owner }}" --password-stdin
 
@@ -27,7 +23,7 @@ jobs:
         run: echo "REPO_OWNER_LOWER=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
       - name: Build Docker image
-        run: docker build -t ghcr.io/${{ env.REPO_OWNER_LOWER }}/javaapp:latest .
+        run: docker build -t ghcr.io/${{ env.REPO_OWNER_LOWER }}/javaapp:alpine .
 
       - name: Push Docker image to GHCR
-        run: docker push ghcr.io/${{ env.REPO_OWNER_LOWER }}/javaapp:latest
+        run: docker push ghcr.io/${{ env.REPO_OWNER_LOWER }}/javaapp:alpine
