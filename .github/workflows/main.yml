@@ -33,5 +33,7 @@ jobs:
             --push \
             --tag ghcr.io/${{ env.REPO_OWNER_LOWER }}/javaapp:1.0.0 \
             --tag ghcr.io/${{ env.REPO_OWNER_LOWER }}/javaapp:latest \
+            --cache-from=type=registry,ref=ghcr.io/${{ env.REPO_OWNER_LOWER }}/javaapp:cache \
+            --cache-to=type=registry,ref=ghcr.io/${{ env.REPO_OWNER_LOWER }}/javaapp:cache,mode=max \
             .
 
